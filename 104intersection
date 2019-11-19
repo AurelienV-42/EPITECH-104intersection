@@ -1,0 +1,84 @@
+#!/usr/bin/python3
+
+from math import *
+import sys
+import argparse
+
+parser = argparse.ArgumentParser(description = 'This is my 104intersection')
+parser.add_argument("opt", type = int, choices = (1, 2, 3), help = "1, 2 or 3")
+parser.add_argument("xp", type = float, help = "Error type")
+parser.add_argument("yp", type = float, help = "Error type")
+parser.add_argument("zp", type = float, help = "Error type")
+parser.add_argument("xv", type = float, help = "Error type")
+parser.add_argument("yv", type = float, help = "Error type")
+parser.add_argument("zv", type = float, help = "Error type")
+parser.add_argument("p", type = float, help = "Error type")
+
+
+try:
+     args = parser.parse_args()
+except:
+     print ("Error when parsing arguments")
+     exit(84)
+
+if (args.opt == 1):
+     if (args.p <= 0):
+          exit(84)
+     print ("sphere of radius", "%.f"%args.p)
+     A = args.xv**2 + args.yv**2 + args.zv**2
+     B = 2*(args.xv * args.xp) + 2*(args.yv * args.yp) + 2*(args.zv * args.zp)
+     C = args.xp**2 + args.yp**2 + args.zp**2 - args.p**2
+     print ("straight line going through the (%.f,%.f,%.f) point and of direction vector (%.f,%.f,%.f)" % (args.xp, args.yp, args.zp, args.xv, args.yv, args.zv))
+
+if (args.opt == 2):
+     if (args.p <= 0):
+          sys.exit(84)
+     if (args.xv == 0 and args.yv == 0 and args.zv == 0):
+          sys.exit(84)
+     A = args.xv**2 + args.yv**2
+     B = 2*(args.xv * args.xp) + 2*(args.yv * args.yp)
+     C = args.xp**2 + args.yp**2 - args.p**2
+     print ("cylinder of radius", "%.f"%args.p)
+     print ("straight line going through the (%.f,%.f,%.f) point and of direction vector (%.f,%.f,%.f)" % (args.xp, args.yp, args.zp, args.xv, args.yv, args.zv))
+     if (args.xv == 0 and args.yv == 0 and args.zv != 0):
+          if (args.xp**2 + args.yp**2 == args.p**2):
+               print ("There is an infinite number of intersection points.")
+     if (A == 0):
+          print ("No intersection point.")
+          exit(0)
+
+if (args.opt == 3):
+     if (args.p > 90 or args.p <= 0):
+          exit(84)
+     print ("cone of", "%.f"% args.p, "degree angle")
+     rad = args.p * pi / 180.0
+     A = args.xv * args.xv + args.yv * args.yv - (args.zv * args.zv) * (tan(rad))**2
+     B = 2*(args.xv * args.xp) + 2*(args.yv * args.yp) - (2*(args.zv * args.zp)) * (tan(rad))**2
+     C = args.xp * args.xp + args.yp * args.yp - (args.zp * args.zp) * (tan(rad))**2
+     print ("straight line going through the (%.f,%.f,%.f) point and of direction vector (%.f,%.f,%.f)" % (args.xp, args.yp, args.zp, args.xv, args.yv, args.zv))
+
+Disc = (B * B) - (4 * A * C)
+
+if (Disc < 0):
+     print ("No intersection point.")
+
+if (Disc == 0):
+     k = -B / (2 * A)
+     print ("1 intersection point :")
+     x = k * args.xv + args.xp
+     y = k * args.yv + args.yp
+     z = k * args.zv + args.zp
+     print ("(%.3f, %.3f, %.3f)" % (x, y, z))
+
+if (Disc > 0):
+     k = (-B - sqrt(Disc))/ (2 * A)
+     k2 = (-B + sqrt(Disc))/ (2 * A)
+     print ("2 intersection points :")
+     x = k2 * args.xv + args.xp
+     y = k2 * args.yv + args.yp
+     z = k2 * args.zv + args.zp
+     x2 = k * args.xv + args.xp
+     y2 = k * args.yv + args.yp
+     z2 = k * args.zv + args.zp
+     print ("(%.3f, %.3f, %.3f)" % (x, y, z))
+     print ("(%.3f, %.3f, %.3f)" % (x2, y2, z2))
